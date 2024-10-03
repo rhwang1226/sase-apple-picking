@@ -1,6 +1,7 @@
 import csv
 import heapq
 import math
+from collections import defaultdict
 
 class Member:
     def __init__(self, name, xcoord, ycoord, seats):
@@ -28,31 +29,44 @@ with open(filename, mode='r') as file:
         else:
             rider_list.append(member)
 
-##### DJIKSTRA'S ALGORITHM!
+# Cluster riders by coordinates
+def cluster_riders_by_coordinates(riders):
+    clusters = defaultdict(list)
+    for rider in riders:
+        clusters[(rider.xcoord, rider.ycoord)].append(rider)
+    return clusters
+
+# Calculate Euclidean distance between two members
 def calculate_distance(member1, member2):
     return math.sqrt((member1.xcoord - member2.xcoord)**2 + (member1.ycoord - member2.ycoord)**2)
 
 def assign_riders_to_drivers(riders, drivers):
     assignments = {}
-    
-    # Create a priority queue for each rider
-    for rider in riders:
+
+    # Cluster riders by their coordinates
+    clustered_riders = cluster_riders_by_coordinates(riders)
+
+    # Assign riders from the same coordinates to the same driver
+    for coords, riders_at_same_coords in clustered_riders.items():
         pq = []
         for i, driver in enumerate(drivers):
             if driver.seats > 0:
-                distance = calculate_distance(rider, driver)
+                # Use the distance to the first rider in the group as the distance measure
+                distance = calculate_distance(riders_at_same_coords[0], driver)
                 heapq.heappush(pq, (distance, i))
-        
-        # Assign the closest available driver to the rider
-        while pq:
+
+        while pq and riders_at_same_coords:
             distance, driver_index = heapq.heappop(pq)
-            if drivers[driver_index].seats > 0:
-                if drivers[driver_index].name not in assignments:
-                    assignments[drivers[driver_index].name] = []
-                assignments[drivers[driver_index].name].append(rider.name)
-                drivers[driver_index].seats -= 1
-                break
-    
+            driver = drivers[driver_index]
+            
+            # Try to assign as many riders from the same coordinates as possible
+            while driver.seats > 0 and riders_at_same_coords:
+                rider = riders_at_same_coords.pop(0)
+                if driver.name not in assignments:
+                    assignments[driver.name] = []
+                assignments[driver.name].append(rider.name)
+                driver.seats -= 1
+
     return assignments
 
 assignments = assign_riders_to_drivers(rider_list, driver_list)
