@@ -1,7 +1,7 @@
 # Djikstra's Algorithm for SASE Apple Picking Car Assignments
 ## Algorithm Overview
 
-This program was developed to solve the logistical challenge of assigning riders to drivers for an apple-picking field trip organized by my chapter of the Society of Asian Scientists and Engineers (SASE). The goal was to make this assignment as efficient as possible, ensuring that riders were paired with drivers based on proximity to minimize travel time. To achieve this, I implemented a custom approach based on Dijkstra's algorithm, which is traditionally used for finding the shortest paths between points in a graph.
+My Society of Asian Scientists and Engineers (SASE) chapter is going on an apple picking field trip, and I needed to organize transportation. I saw in this a potential to apply computer science concepts, which is an opportunity I couldn't pass; I love it when concepts of computer science have real life applications. The goal was to make this assignment as efficient as possible, ensuring that riders were paired with drivers based on proximity to minimize travel time. To achieve this, I implemented a custom approach based on Dijkstra's algorithm, which is traditionally used for finding the shortest paths between points in a graph.
 
 ### Step-by-Step Breakdown
 
@@ -49,7 +49,7 @@ After cloning, navigate into the project directory:
 
 3. **Prepare the `data.csv` file:**
 
-Ensure that the `data.csv` file contains the necessary rider and driver information in the following format:
+Ensure that the `data.csv` file contains the necessary rider and driver information in the following format, with riders separated by newlines:
     `name,xcoord,ycoord,seats`
 - `name`: The name of the rider or driver.
 - `xcoord`: X-coordinate representing the person's location.
